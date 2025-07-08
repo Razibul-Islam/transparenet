@@ -10,9 +10,12 @@ export default function TransparenetContext({ children }) {
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
   const [Isowner, setIsOwner] = useState(false);
+  const [IsManufacturer, setIsManufacturer] = useState(false);
+  const [IsDistributor, setIsDistributor] = useState(false);
+  const [IsWholesaler, setIsWholesaler] = useState(false);
+  const [IsRetailer, setIsRetailer] = useState(false);
   const [provider, setProvider] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [signerr, setSignerr] = useState(null);
 
   useEffect(() => {
     const init = async () => {
@@ -36,15 +39,37 @@ export default function TransparenetContext({ children }) {
               signer
             );
 
-            setSignerr(signer);
-
             const role = await contractInstance.ADMIN_ROLE();
+            const ManufacturerRole = await contractInstance.MANUFACTURER();
+            const DistributorRole = await contractInstance.DISTRIBUTOR();
+            const WholesalerRole = await contractInstance.WHOLESALER();
+            const RetailerRole = await contractInstance.RETAILER();
             const myAddress = await signer.getAddress();
             const ownerAccount = await contractInstance.hasRole(
               role,
               myAddress
             );
+            const ManufacturerAcc = await contractInstance.hasRole(
+              ManufacturerRole,
+              myAddress
+            );
+            const DistributorAcc = await contractInstance.hasRole(
+              DistributorRole,
+              myAddress
+            );
+            const WholeSalerAcc = await contractInstance.hasRole(
+              WholesalerRole,
+              myAddress
+            );
+            const RetailerAcc = await contractInstance.hasRole(
+              RetailerRole,
+              myAddress
+            );
             setIsOwner(ownerAccount);
+            setIsManufacturer(ManufacturerAcc);
+            setIsDistributor(DistributorAcc);
+            setIsWholesaler(WholeSalerAcc);
+            setIsRetailer(RetailerAcc);
             setContract(contractInstance);
 
             setIsLoading(false);
@@ -67,7 +92,34 @@ export default function TransparenetContext({ children }) {
               const signer = await provider.getSigner();
               const myAddress = await signer.getAddress();
               const role = await contract.ADMIN_ROLE();
+              const ManufacturerRole = await contract.MANUFACTURER();
+              const DistributorRole = await contract.DISTRIBUTOR();
+              const WholesalerRole = await contract.WHOLESALER();
+              const RetailerRole = await contract.RETAILER();
+
               const ownerAccount = await contract.hasRole(role, myAddress);
+              const ManufacturerAcc = await contract.hasRole(
+                ManufacturerRole,
+                myAddress
+              );
+              const DistributorAcc = await contract.hasRole(
+                DistributorRole,
+                myAddress
+              );
+              const WholeSalerAcc = await contract.hasRole(
+                WholesalerRole,
+                myAddress
+              );
+              const RetailerAcc = await contract.hasRole(
+                RetailerRole,
+                myAddress
+              );
+
+              setIsOwner(ownerAccount);
+              setIsManufacturer(ManufacturerAcc);
+              setIsDistributor(DistributorAcc);
+              setIsWholesaler(WholeSalerAcc);
+              setIsRetailer(RetailerAcc);
 
               setIsOwner(ownerAccount);
             } else {
@@ -89,7 +141,7 @@ export default function TransparenetContext({ children }) {
     } catch (err) {
       console.error("Error during change Account: ", err);
     }
-  }, [contract, signerr]);
+  }, [contract, provider]);
 
   const connectWallet = async () => {
     try {
@@ -104,16 +156,44 @@ export default function TransparenetContext({ children }) {
         setProvider(provider);
 
         const signer = await provider.getSigner();
-        setSignerr(signerr);
+
         const contractInstance = new ethers.Contract(
           ContractAddress,
           ContractABI,
           signer
         );
 
-        const owner = await contractInstance.ADMIN_ROLE();
+        const myAddress = await signer.getAddress();
+        const role = await contract.ADMIN_ROLE();
+        const ManufacturerRole = await contractInstance.MANUFACTURER();
+        const DistributorRole = await contractInstance.DISTRIBUTOR();
+        const WholesalerRole = await contractInstance.WHOLESALER();
+        const RetailerRole = await contractInstance.RETAILER();
+
+        const ownerAccount = await contractInstance.hasRole(role, myAddress);
+        const ManufacturerAcc = await contractInstance.hasRole(
+          ManufacturerRole,
+          myAddress
+        );
+        const DistributorAcc = await contractInstance.hasRole(
+          DistributorRole,
+          myAddress
+        );
+        const WholeSalerAcc = await contractInstance.hasRole(
+          WholesalerRole,
+          myAddress
+        );
+        const RetailerAcc = await contractInstance.hasRole(
+          RetailerRole,
+          myAddress
+        );
+        setIsOwner(ownerAccount);
+        setIsManufacturer(ManufacturerAcc);
+        setIsDistributor(DistributorAcc);
+        setIsWholesaler(WholeSalerAcc);
+        setIsRetailer(RetailerAcc);
         setContract(contractInstance);
-        setIsOwner(owner.toLowerCase() === accounts[0].toLowerCase());
+        setIsOwner(ownerAccount);
       }
     } catch (err) {
       console.error("error during connecting wallet :", err);
@@ -356,6 +436,10 @@ export default function TransparenetContext({ children }) {
   const info = {
     account,
     Isowner,
+    IsRetailer,
+    IsWholesaler,
+    IsDistributor,
+    IsManufacturer,
     isLoading,
     connectWallet,
     Manufacturer,
