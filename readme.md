@@ -1,6 +1,6 @@
 # 🌐 TranspareNet – Decentralized Supply Chain Transparency Platform
 
-![TranspareNet Banner](images/banner.webp) <!-- Replace with your actual banner -->
+![TranspareNet Banner](public/banner.webp) <!-- Replace with your actual banner -->
 
 **TranspareNet** is a full-stack decentralized application (dApp) built on the **Polygon blockchain** to enable **transparent, tamper-proof tracking** of products across the supply chain. It empowers producers to register products, distributors to update status, and consumers to verify authenticity via QR codes — combating counterfeiting and building trust.
 
@@ -72,7 +72,7 @@
 
 #### 1. Clone the Repository
 ```bash
-git clone https://github.com/Razibul-Islam/transparenet
+git clone https://github.com/Razibul-Islam/transparenet.git
 cd transparenet
 ```
 ## 2. Install Dependencies
@@ -130,6 +130,7 @@ transparenet/
 ├── contracts/
 │   ├── ProductRegistry.sol
 │   ├── CertificationVerifier.sol
+│   ├── TransparentNet.sol
 │   ├── scripts/
 │   └── test/
 ├── frontend/
@@ -229,15 +230,5 @@ Built by Razibul Islam
     - https://github.com/Razibul-Islam
 
 ⭐️ Star this repo if you find it helpful — let’s build transparent supply chains together!
-```yaml
 
----
-
-Would you like me to:
-- Generate the smart contract boilerplate files?
-- Write the LinkedIn post that matches this project?
-- Create a case study-style PDF for client pitch?
-
-Let me know what you need next.
-```s
 
