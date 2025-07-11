@@ -2,14 +2,21 @@ import { useState } from "react";
 import { Header } from "../../Components/Dashboard/Header";
 import { Outlet } from "react-router";
 import { Sidebar } from "../../Components/Dashboard/Sidebar";
-import { RoleModal } from "../../Components/Dashboard/RoleModal";
+import { RoleModal } from "../../Components/Dashboard/Modals/RoleModal";
 import { UseCompContext } from "../../../context/ComContext";
+import { GetRoleMembers } from "../../Components/Dashboard/Modals/GetRoleMembers";
+import { RevokeMember } from "../../Components/Dashboard/RevokeMember";
+import { ProductModal } from "../../Components/Dashboard/Modals/ProductModal";
 
 export const DrugSupplyChainDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [currentRole, setCurrentRole] = useState("ADMIN");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { setIsModalOpen, handleSubmit, isModalOpen } = UseCompContext();
+  const { setIsModalOpen, handleSubmit, isModalOpen,isGetRoleMember,
+    isRevokeModalOpen,
+    setIsGetRoleMember,
+    setIsRevokeModalOpen,isProductModalOpen,
+    setIsProductModalOpen,handleRegister } = UseCompContext();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -48,6 +55,26 @@ export const DrugSupplyChainDashboard = () => {
             placeholder="Address"
             submitText="Save"
             cancelText="Cancel"
+          />
+          <GetRoleMembers
+            isOpen = {isGetRoleMember}
+            onClose={()=> setIsGetRoleMember(false)}
+            onSubmit = {handleSubmit}
+            submitText = "Submit"
+            cancelText = "Cancel"
+          />
+          <RevokeMember
+          isOpen={isRevokeModalOpen}
+          onClose={()=>setIsRevokeModalOpen(false)}
+          onSubmit={handleSubmit}
+          submitText="Submit"
+          cancelText="Cancel"
+          />
+          <ProductModal isOpen={isProductModalOpen}
+          onClose={()=>setIsProductModalOpen(false)}
+          onSubmit={handleRegister}
+          submitText="Submit"
+          cancelText="Cancel"
           />
         </main>
       </div>

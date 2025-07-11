@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, keccak256, toUtf8Bytes } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ContractABI, ContractAddress } from "../utils/accouts";
 
@@ -266,9 +266,29 @@ export default function TransparenetContext({ children }) {
 
   const hasAnyRole = async (addr) => {
     if (!contract && !Isowner) return false;
+
+    const Roles = {
+      ADMIN_ROLE : keccak256(toUtf8Bytes("ADMIN_ROLE")),
+      MANUFACTURER: keccak256(toUtf8Bytes("MANUFACTURER")),
+      DISTRIBUTOR: keccak256(toUtf8Bytes("DISTRIBUTOR")),
+      WHOLESALER: keccak256(toUtf8Bytes("WHOLESALER")),
+      RETAILER: keccak256(toUtf8Bytes("RETAILER"))
+    }
+
     try {
       const Role = await contract.hasAnyRole(addr);
-      return Role;
+
+      if(Role === "0x0000000000000000000000000000000000000000000000000000000000000000"){
+        return "No Role";
+      }
+
+      if(Role === Roles.ADMIN_ROLE) return "ADMIN";
+      if(Role === Roles.MANUFACTURER) return "MANUFACTURER";
+      if(Role === Roles.DISTRIBUTOR) return "DISTRIBUTOR";
+      if(Role === Roles.WHOLESALER) return "WHOLESALER";
+      if(Role === Roles.RETAILER) return "RETAILER";
+
+      return "Unknown Role";
     } catch (err) {
       console.error("Error during Getting has any Role :", err);
     }
@@ -281,7 +301,6 @@ export default function TransparenetContext({ children }) {
     composition,
     expiryDate,
     ipfsDocuments,
-    history
   ) => {
     if (!contract) return false;
     if (isEmpty(batchId)) throw new Error("Batch id Required");
@@ -289,8 +308,7 @@ export default function TransparenetContext({ children }) {
     if (isEmpty(manufacturer)) throw new Error("Manufacturer Required");
     if (isEmpty(composition)) throw new Error("Composition Required");
     if (isEmpty(expiryDate)) throw new Error("ExpiryDate Required");
-    if (isEmpty(ipfsDocuments)) throw new Error("IPFS Documents Required");
-    if (isEmpty(history)) throw new Error("History Required");
+
 
     try {
       setIsLoading(true);
@@ -302,7 +320,7 @@ export default function TransparenetContext({ children }) {
         composition,
         expiryDate,
         ipfsDocuments,
-        history
+        []
       );
       tx.wait();
       return true;

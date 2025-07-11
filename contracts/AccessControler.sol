@@ -12,7 +12,7 @@ contract AccessController is AccessControl, Ownable, Structs {
     bytes32 public RETAILER = keccak256("RETAILER");
 
     constructor(address initialOwner) Ownable(initialOwner) {
-        _grantRole(ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, initialOwner);
     }
 
     function _makeManufacturer(address addr) external {

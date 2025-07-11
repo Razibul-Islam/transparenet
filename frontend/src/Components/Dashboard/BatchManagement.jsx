@@ -1,7 +1,28 @@
+import { UseCompContext } from "../../../context/ComContext";
+import { UseTNContext } from "../../../context/TransparenetContext";
 import { FunctionCard } from "./FunctionCard";
 
-export const BatchManagement = ({ currentRole }) => (
-  <div className="space-y-6">
+export const BatchManagement = () => {
+const { IsDistributor, IsManufacturer, IsWholesaler, IsRetailer, Isowner } =
+    UseTNContext();
+  const { setIsProductModalOpen } = UseCompContext();
+
+  let currentRole = null;
+
+  if (Isowner) {
+    currentRole = "ADMIN";
+  } else if (IsManufacturer) {
+    currentRole = "MANUFACTURER";
+  } else if (IsDistributor) {
+    currentRole = "DISTRIBUTOR";
+  } else if (IsWholesaler) {
+    currentRole = "WHOLESALER";
+  } else if (IsRetailer) {
+    currentRole = "RETAILER";
+  } else {
+    currentRole = "NO_ROLE";
+  }
+  return <div className="space-y-6">
     <div className="bg-white rounded-lg shadow-md p-6">
       <h3 className="text-lg font-semibold text-gray-800 mb-6">
         Batch Management Functions
@@ -11,7 +32,7 @@ export const BatchManagement = ({ currentRole }) => (
           title="registerBatch"
           description="Register a new batch in the supply chain"
           requiredRoles={["ADMIN", "MANUFACTURER"]}
-          onExecute={() => console.log("Register Batch")}
+          onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
         <FunctionCard
@@ -23,7 +44,7 @@ export const BatchManagement = ({ currentRole }) => (
             "WHOLESALER",
             "RETAILER",
           ]}
-          onExecute={() => console.log("Update Status")}
+          onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
         <FunctionCard
@@ -36,7 +57,7 @@ export const BatchManagement = ({ currentRole }) => (
             "WHOLESALER",
             "RETAILER",
           ]}
-          onExecute={() => console.log("Get Batch Details")}
+          onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
         <FunctionCard
@@ -49,7 +70,7 @@ export const BatchManagement = ({ currentRole }) => (
             "WHOLESALER",
             "RETAILER",
           ]}
-          onExecute={() => console.log("Get All Batches")}
+          onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
         <FunctionCard
@@ -62,7 +83,7 @@ export const BatchManagement = ({ currentRole }) => (
             "WHOLESALER",
             "RETAILER",
           ]}
-          onExecute={() => console.log("Get Batches By Owner")}
+          onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
         <FunctionCard
@@ -75,10 +96,10 @@ export const BatchManagement = ({ currentRole }) => (
             "WHOLESALER",
             "RETAILER",
           ]}
-          onExecute={() => console.log("Get Batches By Status")}
+         onExecute={() => setIsProductModalOpen(true)}
           currentRole={currentRole}
         />
       </div>
     </div>
   </div>
-);
+}

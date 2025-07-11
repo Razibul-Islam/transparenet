@@ -5,7 +5,7 @@ import { FunctionCard } from "./FunctionCard";
 export const RoleManagement = () => {
   const { IsDistributor, IsManufacturer, IsWholesaler, IsRetailer, Isowner } =
     UseTNContext();
-  const { setIsModalOpen, setTitle } = UseCompContext();
+  const { setIsModalOpen, setTitle,setIsRevokeModalOpen,setIsGetRoleMember } = UseCompContext();
 
   let currentRole = null;
 
@@ -71,7 +71,7 @@ export const RoleManagement = () => {
             title="revokeRole"
             description="Revoke roles from entities"
             requiredRoles={["ADMIN"]}
-            onExecute={() => setIsModalOpen(true)}
+            onExecute={() => setIsRevokeModalOpen(true)}
             getTitle={setTitle}
             currentRole={currentRole}
           />
@@ -93,7 +93,8 @@ export const RoleManagement = () => {
               "WHOLESALER",
               "RETAILER",
             ]}
-            onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
+            onExecute={() => setIsGetRoleMember(true)}
             currentRole={currentRole}
           />
           <FunctionCard
@@ -106,6 +107,7 @@ export const RoleManagement = () => {
               "WHOLESALER",
               "RETAILER",
             ]}
+            getTitle={setTitle}
             onExecute={() => setIsModalOpen(true)}
             currentRole={currentRole}
           />
