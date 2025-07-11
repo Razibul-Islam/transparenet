@@ -193,7 +193,6 @@ export default function TransparenetContext({ children }) {
         setIsWholesaler(WholeSalerAcc);
         setIsRetailer(RetailerAcc);
         setContract(contractInstance);
-        setIsOwner(ownerAccount);
       }
     } catch (err) {
       console.error("error during connecting wallet :", err);

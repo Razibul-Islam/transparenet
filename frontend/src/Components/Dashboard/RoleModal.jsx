@@ -12,7 +12,6 @@ export const RoleModal = ({
   cancelText = "Cancel",
 }) => {
   const [inputValue, setInputValue] = useState("");
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
@@ -49,6 +48,7 @@ export const RoleModal = ({
             <input
               type={inputType}
               value={inputValue}
+              name="address"
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={placeholder}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"

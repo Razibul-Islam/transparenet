@@ -5,7 +5,7 @@ import { FunctionCard } from "./FunctionCard";
 export const RoleManagement = () => {
   const { IsDistributor, IsManufacturer, IsWholesaler, IsRetailer, Isowner } =
     UseTNContext();
-  const { setIsModalOpen } = UseCompContext();
+  const { setIsModalOpen, setTitle } = UseCompContext();
 
   let currentRole = null;
 
@@ -35,6 +35,7 @@ export const RoleManagement = () => {
             description="Create a new manufacturer entity in the supply chain"
             requiredRoles={["ADMIN"]}
             onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
             currentRole={currentRole}
           />
           <FunctionCard
@@ -42,6 +43,7 @@ export const RoleManagement = () => {
             description="Create a new distributor entity"
             requiredRoles={["ADMIN", "MANUFACTURER"]}
             onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
             currentRole={currentRole}
           />
           <FunctionCard
@@ -49,6 +51,7 @@ export const RoleManagement = () => {
             description="Create a new wholesaler entity"
             requiredRoles={["ADMIN", "MANUFACTURER", "DISTRIBUTOR"]}
             onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
             currentRole={currentRole}
           />
           <FunctionCard
@@ -61,6 +64,7 @@ export const RoleManagement = () => {
               "WHOLESALER",
             ]}
             onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
             currentRole={currentRole}
           />
           <FunctionCard
@@ -68,6 +72,7 @@ export const RoleManagement = () => {
             description="Revoke roles from entities"
             requiredRoles={["ADMIN"]}
             onExecute={() => setIsModalOpen(true)}
+            getTitle={setTitle}
             currentRole={currentRole}
           />
         </div>

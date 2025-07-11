@@ -3,6 +3,7 @@ export const FunctionCard = ({
   description,
   requiredRoles,
   onExecute,
+  getTitle,
   disabled = false,
   currentRole,
 }) => {
@@ -37,7 +38,10 @@ export const FunctionCard = ({
           </div>
         </div>
         <button
-          onClick={onExecute}
+          onClick={() => {
+            onExecute();
+            getTitle(title);
+          }}
           disabled={!hasPermission || disabled}
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             hasPermission && !disabled

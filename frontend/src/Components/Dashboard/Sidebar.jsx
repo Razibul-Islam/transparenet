@@ -41,6 +41,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           const Icon = item.icon;
           return (
             <NavLink
+              key={item}
               to={item.id}
               className={({ isActive }) =>
                 `w-full flex items-center px-6 py-3 text-left hover:bg-gray-50 transition-colors ${
