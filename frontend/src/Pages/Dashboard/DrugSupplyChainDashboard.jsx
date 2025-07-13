@@ -7,16 +7,31 @@ import { UseCompContext } from "../../../context/ComContext";
 import { GetRoleMembers } from "../../Components/Dashboard/Modals/GetRoleMembers";
 import { RevokeMember } from "../../Components/Dashboard/RevokeMember";
 import { ProductModal } from "../../Components/Dashboard/Modals/ProductModal";
+import { UpdateStatus } from "../../Components/Dashboard/Modals/UpdateStatus";
+import { GetDetails } from "../../Components/Dashboard/Modals/GetDetails";
 
 export const DrugSupplyChainDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [currentRole, setCurrentRole] = useState("ADMIN");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { setIsModalOpen, handleSubmit, isModalOpen,isGetRoleMember,
+  const {
+    setIsModalOpen,
+    handleSubmit,
+    isModalOpen,
+    isGetRoleMember,
     isRevokeModalOpen,
     setIsGetRoleMember,
-    setIsRevokeModalOpen,isProductModalOpen,
-    setIsProductModalOpen,handleRegister } = UseCompContext();
+    setIsRevokeModalOpen,
+    isProductModalOpen,
+    setIsProductModalOpen,
+    handleRegister,
+    isStatusModalOpen,
+    setIsStatusModalOpen,
+    handleUpdateStatus,
+    getBatchDetails,
+    setIsGetDetailsOpen,
+    isGetDetailsOpen,
+  } = UseCompContext();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -57,24 +72,35 @@ export const DrugSupplyChainDashboard = () => {
             cancelText="Cancel"
           />
           <GetRoleMembers
-            isOpen = {isGetRoleMember}
-            onClose={()=> setIsGetRoleMember(false)}
-            onSubmit = {handleSubmit}
-            submitText = "Submit"
-            cancelText = "Cancel"
+            isOpen={isGetRoleMember}
+            onClose={() => setIsGetRoleMember(false)}
+            onSubmit={handleSubmit}
+            submitText="Submit"
+            cancelText="Cancel"
           />
           <RevokeMember
-          isOpen={isRevokeModalOpen}
-          onClose={()=>setIsRevokeModalOpen(false)}
-          onSubmit={handleSubmit}
-          submitText="Submit"
-          cancelText="Cancel"
+            isOpen={isRevokeModalOpen}
+            onClose={() => setIsRevokeModalOpen(false)}
+            onSubmit={handleSubmit}
+            submitText="Submit"
+            cancelText="Cancel"
           />
-          <ProductModal isOpen={isProductModalOpen}
-          onClose={()=>setIsProductModalOpen(false)}
-          onSubmit={handleRegister}
-          submitText="Submit"
-          cancelText="Cancel"
+          <ProductModal
+            isOpen={isProductModalOpen}
+            onClose={() => setIsProductModalOpen(false)}
+            onSubmit={handleRegister}
+            submitText="Submit"
+            cancelText="Cancel"
+          />
+          <UpdateStatus
+            isOpen={isStatusModalOpen}
+            handleClose={() => setIsStatusModalOpen(false)}
+            onSubmit={handleUpdateStatus}
+          />
+          <GetDetails
+            isOpen={isGetDetailsOpen}
+            handleClose={() => setIsGetDetailsOpen(false)}
+            onSubmit={getBatchDetails}
           />
         </main>
       </div>

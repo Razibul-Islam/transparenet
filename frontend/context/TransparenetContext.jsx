@@ -203,7 +203,7 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
     try {
       const tx = await contract._makeManufacturer(addr);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Making Manufacturer :", err);
@@ -214,7 +214,7 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
     try {
       const tx = await contract._makeDistributor(addr);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Making Distributor :", err);
@@ -225,7 +225,7 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
     try {
       const tx = await contract._makeWholesaler(addr);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Making Wholesaler :", err);
@@ -236,7 +236,7 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
     try {
       const tx = await contract._makeRetailer(addr);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Making Retailer :", err);
@@ -247,7 +247,7 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
     try {
       const tx = await contract.revokeRolee(role, addr);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Revoke Role :", err);
@@ -268,25 +268,28 @@ export default function TransparenetContext({ children }) {
     if (!contract && !Isowner) return false;
 
     const Roles = {
-      ADMIN_ROLE : keccak256(toUtf8Bytes("ADMIN_ROLE")),
+      ADMIN_ROLE: keccak256(toUtf8Bytes("ADMIN_ROLE")),
       MANUFACTURER: keccak256(toUtf8Bytes("MANUFACTURER")),
       DISTRIBUTOR: keccak256(toUtf8Bytes("DISTRIBUTOR")),
       WHOLESALER: keccak256(toUtf8Bytes("WHOLESALER")),
-      RETAILER: keccak256(toUtf8Bytes("RETAILER"))
-    }
+      RETAILER: keccak256(toUtf8Bytes("RETAILER")),
+    };
 
     try {
       const Role = await contract.hasAnyRole(addr);
 
-      if(Role === "0x0000000000000000000000000000000000000000000000000000000000000000"){
+      if (
+        Role ===
+        "0x0000000000000000000000000000000000000000000000000000000000000000"
+      ) {
         return "No Role";
       }
 
-      if(Role === Roles.ADMIN_ROLE) return "ADMIN";
-      if(Role === Roles.MANUFACTURER) return "MANUFACTURER";
-      if(Role === Roles.DISTRIBUTOR) return "DISTRIBUTOR";
-      if(Role === Roles.WHOLESALER) return "WHOLESALER";
-      if(Role === Roles.RETAILER) return "RETAILER";
+      if (Role === Roles.ADMIN_ROLE) return "ADMIN";
+      if (Role === Roles.MANUFACTURER) return "MANUFACTURER";
+      if (Role === Roles.DISTRIBUTOR) return "DISTRIBUTOR";
+      if (Role === Roles.WHOLESALER) return "WHOLESALER";
+      if (Role === Roles.RETAILER) return "RETAILER";
 
       return "Unknown Role";
     } catch (err) {
@@ -300,7 +303,7 @@ export default function TransparenetContext({ children }) {
     manufacturer,
     composition,
     expiryDate,
-    ipfsDocuments,
+    ipfsDocuments
   ) => {
     if (!contract) return false;
     if (isEmpty(batchId)) throw new Error("Batch id Required");
@@ -308,7 +311,6 @@ export default function TransparenetContext({ children }) {
     if (isEmpty(manufacturer)) throw new Error("Manufacturer Required");
     if (isEmpty(composition)) throw new Error("Composition Required");
     if (isEmpty(expiryDate)) throw new Error("ExpiryDate Required");
-
 
     try {
       setIsLoading(true);
@@ -322,10 +324,12 @@ export default function TransparenetContext({ children }) {
         ipfsDocuments,
         []
       );
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Batch Register :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -338,11 +342,14 @@ export default function TransparenetContext({ children }) {
 
     try {
       setIsLoading(true);
+
       const tx = await contract.updateStatus(batchId, newStatus);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Updating Status :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -356,10 +363,12 @@ export default function TransparenetContext({ children }) {
     try {
       setIsLoading(true);
       const tx = await contract.addDocument(batchId, ipfsHash);
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Updating Status :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -371,9 +380,22 @@ export default function TransparenetContext({ children }) {
     try {
       setIsLoading(true);
       const batch = await contract.getBatchDetails(batchId);
-      return batch;
+      return {
+        batchId: batch.batchId,
+        name: batch.name,
+        manufacturer: batch.manufacturer,
+        composition: batch.composition,
+        manufactureDate: batch.manufactureDate,
+        expiryDate: batch.expiryDate,
+        currentOwnerr: batch.currentOwner,
+        currentStatus: batch.currentStatus,
+        ipfsDocuments: batch.ipfsDocuments,
+        history: batch.history,
+      };
     } catch (err) {
       console.error("Error During Get Batch Details :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -393,10 +415,12 @@ export default function TransparenetContext({ children }) {
         level,
         resolved
       );
-      tx.wait();
+      await tx.wait();
       return true;
     } catch (err) {
       console.error("Error during Recording Incident :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -411,6 +435,8 @@ export default function TransparenetContext({ children }) {
       return incident;
     } catch (err) {
       console.error("Error during getting Batch Incident :", err);
+      setIsLoading(false);
+    } finally {
       setIsLoading(false);
     }
   };

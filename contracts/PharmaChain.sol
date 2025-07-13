@@ -2,7 +2,7 @@
 pragma solidity ^0.8.28;
 
 import {Structs} from "./Structs.sol";
-import {AccessController} from "./AccessControler.sol";
+import {AccessController} from "./AccessController.sol";
 
 contract PharmaChain is Structs, AccessController {
     constructor() AccessController(msg.sender) {}
@@ -17,7 +17,9 @@ contract PharmaChain is Structs, AccessController {
         History[] memory history
     ) public {
         require(
-            hasRole(ADMIN_ROLE, msg.sender) || hasRole(MANUFACTURER, msg.sender)
+            hasRole(ADMIN_ROLE, msg.sender) ||
+                hasRole(MANUFACTURER, msg.sender),
+            "Error for admin"
         );
         require(!batchIdValidate[batchId], "Already used Batch Id");
         require(expiryDate > block.timestamp, "Add valid date for Expiry date");
@@ -25,6 +27,8 @@ contract PharmaChain is Structs, AccessController {
 
         batchIdValidate[batchId] = true;
         batchIds.push(batchId);
+
+        string[] memory emptyIpfsDocuments;
 
         DrugBatches[batchId] = DrugBatch({
             batchId: batchId,
@@ -35,21 +39,27 @@ contract PharmaChain is Structs, AccessController {
             expiryDate: expiryDate,
             currentOwner: msg.sender,
             currentStatus: status[Status.REGISTERED],
-            ipfsDocuments: new string[](0),
+            ipfsDocuments: emptyIpfsDocuments,
             history: history
         });
 
+        DrugBatches[batchId].ipfsDocuments.push(ipfsDocuments);
+
         _transferOwnership(msg.sender);
+
+        updateStatus(batchId, 0);
 
         emit BatchRegistered(batchId, name, block.timestamp);
     }
 
     function updateStatus(string calldata batchId, uint8 newStatus) public {
         require(
-            hasRole(MANUFACTURER, msg.sender) ||
+            hasRole(ADMIN_ROLE, msg.sender) ||
+                hasRole(MANUFACTURER, msg.sender) ||
                 hasRole(DISTRIBUTOR, msg.sender) ||
                 hasRole(WHOLESALER, msg.sender) ||
-                hasRole(RETAILER, msg.sender)
+                hasRole(RETAILER, msg.sender),
+            "require admin or Manufacturer or Distributor or Wholesaler or Retailer"
         );
         require(batchIdValidate[batchId], "This is not a valid Batch");
 
@@ -70,10 +80,12 @@ contract PharmaChain is Structs, AccessController {
         string calldata ipfsHash
     ) public {
         require(
-            hasRole(MANUFACTURER, msg.sender) ||
+            hasRole(ADMIN_ROLE, msg.sender) ||
+                hasRole(MANUFACTURER, msg.sender) ||
                 hasRole(DISTRIBUTOR, msg.sender) ||
                 hasRole(WHOLESALER, msg.sender) ||
-                hasRole(RETAILER, msg.sender)
+                hasRole(RETAILER, msg.sender),
+            "require Manufacturer or Distributor or Wholesaler or Retailer"
         );
         require(batchIdValidate[batchId], "This is not a valid Batch");
 
@@ -101,7 +113,8 @@ contract PharmaChain is Structs, AccessController {
         require(
             hasRole(DISTRIBUTOR, msg.sender) ||
                 hasRole(WHOLESALER, msg.sender) ||
-                hasRole(RETAILER, msg.sender)
+                hasRole(RETAILER, msg.sender),
+            "require Distributor or Wholesaler or Retailer"
         );
 
         require(batchIdValidate[batchId], "This is not a valid batch Id");

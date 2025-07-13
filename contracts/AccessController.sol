@@ -116,7 +116,6 @@ contract AccessController is AccessControl, Ownable, Structs {
         address _addr,
         string calldata batchId
     ) internal {
-        require(hasRole(ADMIN_ROLE, msg.sender), "Admin Only Transfer Onwer");
         _transferOwnership(_addr);
         Historys[batchId].previousOwner = msg.sender;
         Historys[batchId].currentOwner = _addr;

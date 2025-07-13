@@ -7,10 +7,28 @@ export default function ComContext({ children }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRevokeModalOpen, setIsRevokeModalOpen] = useState(false);
   const [isGetRoleMember, setIsGetRoleMember] = useState(false);
-  const [isProductModalOpen,setIsProductModalOpen]= useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isGetDetailsOpen, setIsGetDetailsOpen] = useState(false);
   const [submittedValue, setSubmittedValue] = useState("");
   const [title, setTitle] = useState("");
-  const { Manufacturer, batchRegister, Distributor, Wholesaler, Retailer,hasAnyRole,getMemberByRole,revokeRole } = UseTNContext();
+  const [batchDetails, setBatchDetails] = useState({});
+  const {
+    Manufacturer,
+    batchRegister,
+    Distributor,
+    Wholesaler,
+    Retailer,
+    hasAnyRole,
+    getMemberByRole,
+    revokeRole,
+    statusUpdate,
+    batchDetailsGet,
+    IsRetailer,
+    IsWholesaler,
+    IsDistributor,
+    IsManufacturer,
+  } = UseTNContext();
 
   const handleSubmit = async (value) => {
     if (title === "_makeManufacturer") {
@@ -25,26 +43,68 @@ export default function ComContext({ children }) {
     } else if (title === "_makeRetailer") {
       const res = await Retailer(value);
       console.log(res);
-    }else if(title === "hasAnyRole"){
+    } else if (title === "hasAnyRole") {
       const res = await hasAnyRole(value);
       console.log(res);
-    }else if(value === "ADMIN_ROLE" || value === "MANUFACTURER" || value === "WHOLESALER" ||value === "DISTRIBUTOR" || value === "RETAILER"){
+    } else if (
+      value === "ADMIN_ROLE" ||
+      value === "MANUFACTURER" ||
+      value === "WHOLESALER" ||
+      value === "DISTRIBUTOR" ||
+      value === "RETAILER"
+    ) {
       const res = await getMemberByRole(value);
       console.log(res);
-    }else{
-      const res = await revokeRole(value.role,value.address);
+    } else {
+      const res = await revokeRole(value.role, value.address);
       console.log(res);
     }
   };
 
   const handleRegister = async (value) => {
+    let expireTimeStamp = Math.floor(
+      new Date(value.expiryDate).getTime() / 1000
+    );
 
-    let expireTimeStamp = Math.floor(new Date(value.expiryDate).getTime()/1000);
+    const res = await batchRegister(
+      value.batchId,
+      value.name,
+      value.manufacturer,
+      value.composition,
+      expireTimeStamp,
+      value.ipfsDocuments
+    );
 
-
-    const res = await batchRegister(value.batchId,value.name,value.manufacturer,value.composition,expireTimeStamp,value.ipfsDocuments);
     console.log(res);
-  }
+  };
+
+  const getBatchDetails = async (batchId) => {
+    const res = await batchDetailsGet(batchId);
+    setBatchDetails(res);
+    return res;
+  };
+
+  const handleUpdateStatus = async (value) => {
+    if (IsManufacturer) {
+      const res = await statusUpdate(value, 0);
+      console.log(res);
+      console.log(value);
+    } else if (IsDistributor) {
+      const res = await statusUpdate(value, 1);
+      console.log(res);
+      console.log(value);
+    } else if (IsWholesaler) {
+      const res = await statusUpdate(value, 2);
+      console.log(res);
+      console.log(value);
+    } else if (IsRetailer) {
+      const res = await statusUpdate(value, 3);
+      console.log(res);
+      console.log(value);
+    } else {
+      alert("Enter a valid Status");
+    }
+  };
 
   const info = {
     submittedValue,
@@ -52,6 +112,11 @@ export default function ComContext({ children }) {
     isGetRoleMember,
     isRevokeModalOpen,
     isProductModalOpen,
+    isStatusModalOpen,
+    isGetDetailsOpen,
+    batchDetails,
+    setIsGetDetailsOpen,
+    handleUpdateStatus,
     setIsProductModalOpen,
     setIsGetRoleMember,
     setIsRevokeModalOpen,
@@ -59,7 +124,9 @@ export default function ComContext({ children }) {
     setSubmittedValue,
     handleSubmit,
     setTitle,
-    handleRegister
+    handleRegister,
+    setIsStatusModalOpen,
+    getBatchDetails,
   };
   return <CompContext.Provider value={info}>{children}</CompContext.Provider>;
 }

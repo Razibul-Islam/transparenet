@@ -1,40 +1,45 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 
-export const RevokeMember = ({isOpen,
+export const RevokeMember = ({
+  isOpen,
   onClose,
   onSubmit,
   submitText = "Submit",
-  cancelText = "Cancel",}) =>{
-    const [inputValue, setInputValue] = useState("");
-    const [addressValue, setAddressValue] = useState("");
-    
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if (inputValue.trim() && addressValue.trim()) {
-        onSubmit({
-          role: inputValue,
-          address: addressValue
-        });
-        setInputValue("");
-        setAddressValue("");
-        onClose();
-      }
-    };
-  
-    const handleClose = () => {
+  cancelText = "Cancel",
+}) => {
+  const [inputValue, setInputValue] = useState("");
+  const [addressValue, setAddressValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() && addressValue.trim()) {
+      onSubmit({
+        role: inputValue,
+        address: addressValue,
+      });
       setInputValue("");
       setAddressValue("");
       onClose();
-    };
-  
-    if (!isOpen) return null;
-    
-    return <div className="fixed inset-0 backdrop-blur-sm bg-opacity-30 flex items-center justify-center z-50">
+    }
+  };
+
+  const handleClose = () => {
+    setInputValue("");
+    setAddressValue("");
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 backdrop-blur-sm bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-800">Get Role Address</h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            Get Role Address
+          </h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -49,13 +54,15 @@ export const RevokeMember = ({isOpen,
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Select Role
             </label>
-            <select 
-              onKeyPress={(e) => e.key === "Enter" && handleSubmit(e)} 
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" 
+            <select
+              onKeyPress={(e) => e.key === "Enter" && handleSubmit(e)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
               onChange={(e) => setInputValue(e.target.value)}
               value={inputValue}
             >
-              <option value="" disabled>Select Role</option>
+              <option value="" disabled>
+                Select Role
+              </option>
               <option value="ADMIN_ROLE">ADMIN</option>
               <option value="MANUFACTURER">MANUFACTURER</option>
               <option value="DISTRIBUTOR">DISTRIBUTOR</option>
@@ -99,4 +106,5 @@ export const RevokeMember = ({isOpen,
         </div>
       </div>
     </div>
-}
+  );
+};
