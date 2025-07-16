@@ -5,8 +5,16 @@ import { FunctionCard } from "./FunctionCard";
 export const BatchManagement = () => {
   const { IsDistributor, IsManufacturer, IsWholesaler, IsRetailer, Isowner } =
     UseTNContext();
-  const { setIsProductModalOpen, setIsStatusModalOpen, setIsGetDetailsOpen } =
-    UseCompContext();
+  const {
+    setIsProductModalOpen,
+    setIsStatusModalOpen,
+    setIsGetDetailsOpen,
+    setIsAllBatch,
+    getAllBatches,
+    setOwnedBatches,
+    getOwnedBatches,
+    setStatusBatches,
+  } = UseCompContext();
 
   let currentRole = null;
 
@@ -32,14 +40,14 @@ export const BatchManagement = () => {
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <FunctionCard
-            title="registerBatch"
+            title="Register Batch"
             description="Register a new batch in the supply chain"
             requiredRoles={["ADMIN", "MANUFACTURER"]}
             onExecute={() => setIsProductModalOpen(true)}
             currentRole={currentRole}
           />
           <FunctionCard
-            title="updateStatus"
+            title="Update Status"
             description="Update the status of a batch"
             requiredRoles={[
               "MANUFACTURER",
@@ -51,7 +59,7 @@ export const BatchManagement = () => {
             currentRole={currentRole}
           />
           <FunctionCard
-            title="getBatchDetails"
+            title="Get Batch Details"
             description="Get detailed information about a specific batch"
             requiredRoles={[
               "ADMIN",
@@ -64,7 +72,7 @@ export const BatchManagement = () => {
             currentRole={currentRole}
           />
           <FunctionCard
-            title="getAllBatches"
+            title="Get All Batches"
             description="Get all batches in the system"
             requiredRoles={[
               "ADMIN",
@@ -73,11 +81,14 @@ export const BatchManagement = () => {
               "WHOLESALER",
               "RETAILER",
             ]}
-            onExecute={() => setIsProductModalOpen(true)}
+            onExecute={() => {
+              setIsAllBatch(true);
+              getAllBatches();
+            }}
             currentRole={currentRole}
           />
           <FunctionCard
-            title="getBatchesByOwner"
+            title="Get Batches By Owner"
             description="Get batches owned by a specific entity"
             requiredRoles={[
               "ADMIN",
@@ -86,11 +97,14 @@ export const BatchManagement = () => {
               "WHOLESALER",
               "RETAILER",
             ]}
-            onExecute={() => setIsProductModalOpen(true)}
+            onExecute={() => {
+              setOwnedBatches(true);
+              getOwnedBatches();
+            }}
             currentRole={currentRole}
           />
           <FunctionCard
-            title="getBatchesByStatus"
+            title="Get Batches By Status"
             description="Get batches filtered by status"
             requiredRoles={[
               "ADMIN",
@@ -99,7 +113,10 @@ export const BatchManagement = () => {
               "WHOLESALER",
               "RETAILER",
             ]}
-            onExecute={() => setIsProductModalOpen(true)}
+            onExecute={() => {
+              setStatusBatches(true);
+              getAllBatches();
+            }}
             currentRole={currentRole}
           />
         </div>

@@ -9,6 +9,10 @@ import { RevokeMember } from "../../Components/Dashboard/RevokeMember";
 import { ProductModal } from "../../Components/Dashboard/Modals/ProductModal";
 import { UpdateStatus } from "../../Components/Dashboard/Modals/UpdateStatus";
 import { GetDetails } from "../../Components/Dashboard/Modals/GetDetails";
+import { AllBatches } from "../../Components/Dashboard/Modals/AllBatches";
+import { GetBatchesOwner } from "../../Components/Dashboard/Modals/GetBatchesOwner";
+import { BatchByStatus } from "../../Components/Dashboard/Modals/BatchByStatus";
+import { AddDocument } from "../../Components/Dashboard/Document/AddDocument";
 
 export const DrugSupplyChainDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -31,6 +35,14 @@ export const DrugSupplyChainDashboard = () => {
     getBatchDetails,
     setIsGetDetailsOpen,
     isGetDetailsOpen,
+    isAllBatch,
+    setIsAllBatch,
+    ownedBatches,
+    setOwnedBatches,
+    statusBatches,
+    setStatusBatches,
+    setAddDocumentOpen,
+    addDocumentOpen,
   } = UseCompContext();
 
   return (
@@ -101,6 +113,22 @@ export const DrugSupplyChainDashboard = () => {
             isOpen={isGetDetailsOpen}
             handleClose={() => setIsGetDetailsOpen(false)}
             onSubmit={getBatchDetails}
+          />
+          <AllBatches
+            isOpen={isAllBatch}
+            handleClose={() => setIsAllBatch(false)}
+          />
+          <GetBatchesOwner
+            isOpen={ownedBatches}
+            onClose={() => setOwnedBatches(false)}
+          />
+          <BatchByStatus
+            isOpen={statusBatches}
+            onClose={() => setStatusBatches(false)}
+          />
+          <AddDocument
+            isOpen={addDocumentOpen}
+            onClose={() => setAddDocumentOpen(false)}
           />
         </main>
       </div>

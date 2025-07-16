@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import { create } from 'ipfs-http-client';
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import { create } from "ipfs-http-client";
 
 const ipfs = create({
   host: "localhost",
@@ -14,7 +14,7 @@ export const ProductModal = ({
   onSubmit,
   submitText = "Submit",
   cancelText = "Cancel",
-  title = "Add Product Details"
+  title = "Add Product Details",
 }) => {
   const [formData, setFormData] = useState({
     batchId: "",
@@ -22,33 +22,41 @@ export const ProductModal = ({
     manufacturer: "",
     composition: "",
     expiryDate: "",
-    ipfsDocuments: ""
+    ipfsDocuments: "",
   });
 
   const handleInputChange = async (e) => {
-    const { name, value,files  } = e.target;
-    if(name === "ipfsDocuments" && files && files[0]){
-        const file = files[0];
-        const added = await ipfs.add(file);
-        const cid = added.cid.toString();
-        setFormData(prev => ({
-          ...prev,
-          [name]: cid
-        }));
-    } else{
-        setFormData(prev => ({
-          ...prev,
-          [name]: value
-        }));
+    const { name, value, files } = e.target;
+    if (name === "ipfsDocuments" && files && files[0]) {
+      const file = files[0];
+      const added = await ipfs.add(file);
+      const cid = added.cid.toString();
+      setFormData((prev) => ({
+        ...prev,
+        [name]: cid,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    const requiredFields = ['batchId', 'name', 'manufacturer', 'composition', 'expiryDate'];
-    const isFormValid = requiredFields.every(field => formData[field].trim() !== "");
-    
+
+    const requiredFields = [
+      "batchId",
+      "name",
+      "manufacturer",
+      "composition",
+      "expiryDate",
+    ];
+    const isFormValid = requiredFields.every(
+      (field) => formData[field].trim() !== ""
+    );
+
     if (isFormValid) {
       onSubmit(formData);
       handleClose();
@@ -62,7 +70,7 @@ export const ProductModal = ({
       manufacturer: "",
       composition: "",
       expiryDate: "",
-      ipfsDocuments: ""
+      ipfsDocuments: "",
     });
     onClose();
   };
@@ -159,7 +167,6 @@ export const ProductModal = ({
               name="expiryDate"
               value={formData.expiryDate}
               onChange={handleInputChange}
-
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
               required
             />
@@ -177,7 +184,9 @@ export const ProductModal = ({
               accept=".pdf,.doc,.docx,.txt,.json"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
-            <p className="text-xs text-gray-500 mt-1">Optional: Upload file to IPFS</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Optional: Upload file to IPFS
+            </p>
           </div>
 
           {/* Actions */}

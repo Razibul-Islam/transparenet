@@ -10,6 +10,10 @@ export default function ComContext({ children }) {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isGetDetailsOpen, setIsGetDetailsOpen] = useState(false);
+  const [isAllBatch, setIsAllBatch] = useState(false);
+  const [ownedBatches, setOwnedBatches] = useState(false);
+  const [statusBatches, setStatusBatches] = useState(false);
+  const [addDocumentOpen, setAddDocumentOpen] = useState(false);
   const [submittedValue, setSubmittedValue] = useState("");
   const [title, setTitle] = useState("");
   const [batchDetails, setBatchDetails] = useState({});
@@ -28,6 +32,9 @@ export default function ComContext({ children }) {
     IsWholesaler,
     IsDistributor,
     IsManufacturer,
+    getAllBatch,
+    getBatchesByOwner,
+    documentAdd,
   } = UseTNContext();
 
   const handleSubmit = async (value) => {
@@ -66,7 +73,7 @@ export default function ComContext({ children }) {
       new Date(value.expiryDate).getTime() / 1000
     );
 
-    const res = await batchRegister(
+    await batchRegister(
       value.batchId,
       value.name,
       value.manufacturer,
@@ -74,8 +81,21 @@ export default function ComContext({ children }) {
       expireTimeStamp,
       value.ipfsDocuments
     );
+  };
 
+  const getAllBatches = async () => {
+    const res = await getAllBatch();
+    return res;
+  };
+
+  const getOwnedBatches = async () => {
+    const res = await getBatchesByOwner();
     console.log(res);
+    return res;
+  };
+
+  const addDocument = async (batchId, document) => {
+    await documentAdd(batchId, document);
   };
 
   const getBatchDetails = async (batchId) => {
@@ -115,6 +135,14 @@ export default function ComContext({ children }) {
     isStatusModalOpen,
     isGetDetailsOpen,
     batchDetails,
+    isAllBatch,
+    ownedBatches,
+    statusBatches,
+    addDocumentOpen,
+    setAddDocumentOpen,
+    setStatusBatches,
+    setOwnedBatches,
+    setIsAllBatch,
     setIsGetDetailsOpen,
     handleUpdateStatus,
     setIsProductModalOpen,
@@ -127,6 +155,9 @@ export default function ComContext({ children }) {
     handleRegister,
     setIsStatusModalOpen,
     getBatchDetails,
+    getAllBatches,
+    getOwnedBatches,
+    addDocument,
   };
   return <CompContext.Provider value={info}>{children}</CompContext.Provider>;
 }

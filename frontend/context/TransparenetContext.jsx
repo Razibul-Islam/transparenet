@@ -16,6 +16,8 @@ export default function TransparenetContext({ children }) {
   const [IsRetailer, setIsRetailer] = useState(false);
   const [provider, setProvider] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [AllBatchess, setAllBatches] = useState([]);
+  const [AllOwnedBatchess, setAllOwnedBatches] = useState([]);
 
   useEffect(() => {
     const init = async () => {
@@ -441,7 +443,7 @@ export default function TransparenetContext({ children }) {
     }
   };
 
-  const getAllBatch = async () => {
+  const getAllBatchIds = async () => {
     if (!contract) return false;
 
     try {
@@ -452,15 +454,46 @@ export default function TransparenetContext({ children }) {
     }
   };
 
-  const getBatchesByOwner = async (addr) => {
-    if (!contract) return [];
-    if (isEmpty(addr)) throw new Error("Address is required");
+  const getAllBatch = async () => {
+    if (!contract) return false;
 
     try {
-      const batches = await contract.getBatchesByOwner(addr);
-      return batches;
+      setIsLoading(true);
+      const batchsIds = await contract.getAllBatches();
+      const AllBatches = [];
+
+      for (let i = 0; i < batchsIds.length; i++) {
+        let batch = await batchDetailsGet(batchsIds[i]);
+        AllBatches.push(batch);
+      }
+      setAllBatches(AllBatches);
+    } catch (err) {
+      console.error("Error during Getting all Batchs :", err);
+      setIsLoading(false);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getBatchesByOwner = async () => {
+    if (!contract) return [];
+
+    try {
+      setIsLoading(true);
+      const batchesIds = await contract.getBatchesByOwner(account);
+      let AllBatches = [];
+      for (let i = 0; i < batchesIds.length; i++) {
+        let batch = await batchDetailsGet(batchesIds[i]);
+        AllBatches.push(batch);
+      }
+      setAllOwnedBatches(AllBatches);
     } catch (err) {
       console.error("Error during Getting Batches By owner :", err);
+      setIsLoading(false);
+      return [];
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -484,6 +517,8 @@ export default function TransparenetContext({ children }) {
     IsDistributor,
     IsManufacturer,
     isLoading,
+    AllBatchess,
+    AllOwnedBatchess,
     connectWallet,
     Manufacturer,
     Distributor,
@@ -498,6 +533,7 @@ export default function TransparenetContext({ children }) {
     batchDetailsGet,
     IncidentRecord,
     BatchIncident,
+    getAllBatchIds,
     getAllBatch,
     getBatchesByOwner,
     BatchesByStatus,
