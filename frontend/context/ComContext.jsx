@@ -14,9 +14,12 @@ export default function ComContext({ children }) {
   const [ownedBatches, setOwnedBatches] = useState(false);
   const [statusBatches, setStatusBatches] = useState(false);
   const [addDocumentOpen, setAddDocumentOpen] = useState(false);
+  const [recordIncidentOpen, setRecordIncidentOpen] = useState(false);
+  const [getRecordsOpen, setGetRecordsOpen] = useState(false);
   const [submittedValue, setSubmittedValue] = useState("");
   const [title, setTitle] = useState("");
   const [batchDetails, setBatchDetails] = useState({});
+  const [batches, setBatches] = useState([]);
   const {
     Manufacturer,
     batchRegister,
@@ -35,6 +38,8 @@ export default function ComContext({ children }) {
     getAllBatch,
     getBatchesByOwner,
     documentAdd,
+    IncidentRecord,
+    BatchIncident,
   } = UseTNContext();
 
   const handleSubmit = async (value) => {
@@ -126,6 +131,50 @@ export default function ComContext({ children }) {
     }
   };
 
+  const getIncidentDetails = async (value) => {
+    if (!value.batchId || !value.reason) {
+      alert("Please fill in all fields");
+      return;
+    }
+    if (!["Critical", "High", "Medium", "Low"].includes(value.priority)) {
+      alert("Please select a valid priority level");
+      return;
+    }
+
+    let priorityMap;
+
+    switch (value.priority) {
+      case "Critical":
+        priorityMap = 0;
+        break;
+      case "High":
+        priorityMap = 1;
+        break;
+      case "Medium":
+        priorityMap = 2;
+        break;
+      case "Low":
+        priorityMap = 3;
+        break;
+      default:
+        alert("Invalid priority level");
+        return;
+    }
+
+    await IncidentRecord(value.batchId, value.reason, priorityMap, false);
+  };
+
+  const getRecords = async (batchId) => {
+    if (!batchId) {
+      alert("Please enter a batch ID");
+      return;
+    }
+    console.log(batchId);
+
+    const res = await BatchIncident(batchId);
+    setBatches(res);
+  };
+
   const info = {
     submittedValue,
     isModalOpen,
@@ -139,6 +188,11 @@ export default function ComContext({ children }) {
     ownedBatches,
     statusBatches,
     addDocumentOpen,
+    recordIncidentOpen,
+    getRecordsOpen,
+    batches,
+    setGetRecordsOpen,
+    setRecordIncidentOpen,
     setAddDocumentOpen,
     setStatusBatches,
     setOwnedBatches,
@@ -158,6 +212,8 @@ export default function ComContext({ children }) {
     getAllBatches,
     getOwnedBatches,
     addDocument,
+    getIncidentDetails,
+    getRecords,
   };
   return <CompContext.Provider value={info}>{children}</CompContext.Provider>;
 }

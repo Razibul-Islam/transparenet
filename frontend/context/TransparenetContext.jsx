@@ -434,6 +434,7 @@ export default function TransparenetContext({ children }) {
     try {
       setIsLoading(true);
       const incident = await contract.getIncidentByBatch(batchId);
+      console.log(batchId);
       return incident;
     } catch (err) {
       console.error("Error during getting Batch Incident :", err);

@@ -13,6 +13,8 @@ import { AllBatches } from "../../Components/Dashboard/Modals/AllBatches";
 import { GetBatchesOwner } from "../../Components/Dashboard/Modals/GetBatchesOwner";
 import { BatchByStatus } from "../../Components/Dashboard/Modals/BatchByStatus";
 import { AddDocument } from "../../Components/Dashboard/Document/AddDocument";
+import { RecordIncident } from "../../Components/Dashboard/Incident/Record";
+import { GetRecords } from "../../Components/Dashboard/Incident/GetRecord";
 
 export const DrugSupplyChainDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -43,6 +45,12 @@ export const DrugSupplyChainDashboard = () => {
     setStatusBatches,
     setAddDocumentOpen,
     addDocumentOpen,
+    setRecordIncidentOpen,
+    recordIncidentOpen,
+    getIncidentDetails,
+    setGetRecordsOpen,
+    getRecordsOpen,
+    getRecords,
   } = UseCompContext();
 
   return (
@@ -129,6 +137,16 @@ export const DrugSupplyChainDashboard = () => {
           <AddDocument
             isOpen={addDocumentOpen}
             onClose={() => setAddDocumentOpen(false)}
+          />
+          <RecordIncident
+            isOpen={recordIncidentOpen}
+            onClose={() => setRecordIncidentOpen(false)}
+            onSubmit={getIncidentDetails}
+          />
+          <GetRecords
+            isOpen={getRecordsOpen}
+            onClose={() => setGetRecordsOpen(false)}
+            onSubmit={getRecords}
           />
         </main>
       </div>

@@ -5,7 +5,15 @@ import { UseTNContext } from "../../context/TransparenetContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { account, Isowner, connectWallet } = UseTNContext();
+  const {
+    account,
+    Isowner,
+    connectWallet,
+    IsRetailer,
+    IsWholesaler,
+    IsDistributor,
+    IsManufacturer,
+  } = UseTNContext();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,7 +48,11 @@ export default function Navbar() {
                 <Shield className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                 <span className="font-medium">Verification</span>
               </Link>
-              {Isowner && (
+              {(Isowner ||
+                IsRetailer ||
+                IsWholesaler ||
+                IsDistributor ||
+                IsManufacturer) && (
                 <Link
                   to="/dashboard"
                   className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 group"

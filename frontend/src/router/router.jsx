@@ -9,6 +9,7 @@ import { IncidentsView } from "../Components/Dashboard/IncidentsView";
 import { ReportsView } from "../Components/Dashboard/ReportsView";
 import { DrugSupplyChainDashboard } from "../Pages/Dashboard/DrugSupplyChainDashboard";
 import { Dashboard } from "../Components/Dashboard/Dashboard";
+import { Verification } from "../Pages/Home/Verification";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "verification",
+        element: <Verification />,
       },
     ],
   },
