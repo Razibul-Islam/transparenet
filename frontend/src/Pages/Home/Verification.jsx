@@ -360,7 +360,7 @@ export const Verification = () => {
   );
 
   const QRCodeTab = () => {
-    if (!batchDetails) {
+    if (!batchDetails.batchId) {
       return (
         <div className="text-center py-16">
           <QrCode className="mx-auto h-16 w-16 text-gray-400 mb-4" />

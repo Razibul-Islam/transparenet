@@ -2,7 +2,7 @@
 
 ![TranspareNet Banner](public/banner.webp) <!-- Replace with your actual banner -->
 
-**TranspareNet** is a full-stack decentralized application (dApp) built on the **Polygon blockchain** to enable **transparent, tamper-proof tracking** of products across the supply chain. It empowers producers to register products, distributors to update status, and consumers to verify authenticity via QR codes — combating counterfeiting and building trust.
+**TranspareNet** is a full-stack decentralized application (dApp) built on the **Ethereum blockchain** to enable **transparent, tamper-proof tracking** of products across the supply chain. It empowers producers to register products, distributors to update status, and consumers to verify authenticity via QR codes — combating counterfeiting and building trust.
 
 ---
 
@@ -30,11 +30,10 @@
 
 | Layer | Technology |
 |------|-------------|
-| **Blockchain** | Polygon Mumbai (Testnet), Mainnet-ready |
+| **Blockchain** | Ethereum Sepolia Testnet |
 | **Smart Contracts** | Solidity (v0.8.20), OpenZeppelin |
 | **Storage** | IPFS via Pinata |
 | **Frontend** | React.js, qrcode.react |
-| **Backend** | Node.js, Express.js |
 | **Wallet** | MetaMask |
 | **Testing** | Hardhat (Solidity), Jest (React) |
 | **Deployment** | Vercel (Frontend), Alchemy (RPC), Pinata (IPFS) |
@@ -64,7 +63,6 @@
 - Node.js v18+
 - npm v8+
 - MetaMask browser extension
-- Polygon Mumbai testnet MATIC ([faucet](https://mumbaifaucet.com))
 - Pinata account
 - Alchemy API key
 

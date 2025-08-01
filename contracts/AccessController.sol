@@ -88,15 +88,47 @@ contract AccessController is AccessControl, Ownable, Structs {
             return false;
         }
 
-        if (length >= 2) {
-            if (hashByte[0] == 0x51 && hashByte[1] == 0x6d) {
-                return length == 46;
-            }
-            if (hashByte[0] == 0x62) {
-                return length >= 44;
-            }
+        if (length >= 2 && hashByte[0] == "Q" && hashByte[1] == "m") {
+            if (length != 46) return false;
+            // Additional check: validate base58 characters
+            return _isValidBase58(hashByte);
+        }
+
+        if (hashByte[0] == "b") {
+            return length >= 44 && length <= 62 && _isValidBase32(hashByte);
         }
         return false;
+    }
+
+    function _isValidBase58(bytes memory data) internal pure returns (bool) {
+        for (uint i = 0; i < data.length; i++) {
+            bytes1 char = data[i];
+            // Base58 alphabet: 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
+            if (
+                !((char >= "1" && char <= "9") ||
+                    (char >= "A" && char <= "H") ||
+                    (char >= "J" && char <= "N") ||
+                    (char >= "P" && char <= "Z") ||
+                    (char >= "a" && char <= "k") ||
+                    (char >= "m" && char <= "z"))
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function _isValidBase32(bytes memory data) internal pure returns (bool) {
+        for (uint i = 0; i < data.length; i++) {
+            bytes1 char = data[i];
+            // Base32 alphabet: abcdefghijklmnopqrstuvwxyz234567
+            if (
+                !((char >= "a" && char <= "z") || (char >= "2" && char <= "7"))
+            ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function _getLocation(address addr) internal view returns (string memory) {

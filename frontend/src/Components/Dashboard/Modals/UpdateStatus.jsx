@@ -25,9 +25,10 @@ export const UpdateStatus = ({ isOpen, handleClose, onSubmit }) => {
     }
 
     if (batchId.trim()) {
-      onSubmit(batchId);
+      await onSubmit(batchId);
       setBatchId("");
       handleClose();
+      alert("Status Updated Successfully");
     }
   };
 

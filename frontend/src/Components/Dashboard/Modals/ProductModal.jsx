@@ -1,12 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
-import { create } from "ipfs-http-client";
-
-const ipfs = create({
-  host: "localhost",
-  port: "5002",
-  protocol: "http",
-});
 
 export const ProductModal = ({
   isOpen,
@@ -28,13 +21,26 @@ export const ProductModal = ({
   const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
     if (name === "ipfsDocuments" && files && files[0]) {
-      const file = files[0];
-      const added = await ipfs.add(file);
-      const cid = added.cid.toString();
-      setFormData((prev) => ({
-        ...prev,
-        [name]: cid,
-      }));
+      const formData = new FormData();
+      formData.append("file", files[0]);
+
+      const response = await fetch("/pinata-api/pinning/pinFileToIPFS", {
+        method: "POST",
+        headers: {
+          pinata_api_key: import.meta.env.VITE_PINATA_API_KEY,
+          pinata_secret_api_key: import.meta.env.VITE_PINATA_API_SECRET,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        setFormData((prev) => ({
+          ...prev,
+          [name]: result.IpfsHash,
+        }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -43,7 +49,7 @@ export const ProductModal = ({
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const requiredFields = [
@@ -58,7 +64,7 @@ export const ProductModal = ({
     );
 
     if (isFormValid) {
-      onSubmit(formData);
+      await onSubmit(formData);
       handleClose();
     }
   };

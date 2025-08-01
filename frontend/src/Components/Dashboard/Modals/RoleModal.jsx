@@ -12,12 +12,13 @@ export const RoleModal = ({
   cancelText = "Cancel",
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      onSubmit(inputValue);
+      await onSubmit(inputValue);
       setInputValue("");
       onClose();
+      alert("Information Submitted Successfully");
     }
   };
 

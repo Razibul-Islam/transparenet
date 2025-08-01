@@ -25,6 +25,7 @@ export const RecordIncident = ({ isOpen, onClose, onSubmit }) => {
       priority: "Medium",
     });
     onClose();
+    alert("Incident Recorded Successfully");
   };
 
   if (!isOpen) return null;

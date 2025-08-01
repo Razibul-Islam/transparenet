@@ -24,9 +24,9 @@ export const AddDocument = ({ isOpen, onClose }) => {
     const cid = added.cid.toString();
 
     await addDocument(batchId, cid);
-    alert("Document added successfully!");
-
     onClose();
+
+    alert("Document added successfully!");
   };
 
   if (!isOpen) return null;
